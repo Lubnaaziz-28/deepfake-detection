@@ -1,0 +1,7 @@
+torch
+torchvision
+efficientnet-pytorch
+opencv-python
+pytorch-grad-cam
+av
+jupyter
