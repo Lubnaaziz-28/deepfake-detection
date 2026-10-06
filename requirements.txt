@@ -1,7 +1,7 @@
-torch
-torchvision
-efficientnet-pytorch
-opencv-python
-pytorch-grad-cam
-av
-jupyter
+torch>=1.12
+torchvision>=0.13
+numpy>=1.21
+opencv-python>=4.8
+tqdm>=4.65
+pillow>=9.0
+scikit-learn>=1.3
