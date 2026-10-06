@@ -4,6 +4,7 @@
 
 ### Temporal Analysis Meets Interpretability
 
+[![CI](https://img.shields.io/github/actions/workflow/status/Lubnaaziz-28/deepfake-detection/ci.yml?logo=github&style=flat-square)]()
 [![Tech](https://img.shields.io/badge/Tech-EfficientNet_%2B_LSTM-1ABC9C)]()
 [![Dataset](https://img.shields.io/badge/Dataset-FaceForensics%2B%2B-E67E22)]()
 [![Python](https://img.shields.io/badge/Python-3.8+-yellow?logo=python&logoColor=white)]()
