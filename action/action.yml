@@ -1,0 +1,63 @@
+name: "Deepfake Scan"
+description: "Scan video files in a directory for deepfakes and fail CI on detected fakes"
+author: "Lubna Aziz (https://github.com/Lubnaaziz-28)"
+
+inputs:
+  input-dir:
+    description: "Directory to scan recursively for video files"
+    required: false
+    default: "./videos"
+  threshold:
+    description: "Confidence threshold (0.0-1.0) for a deepfake verdict. Higher = stricter."
+    required: false
+    default: "0.5"
+  report:
+    description: "Path where the JSON report (verdict, confidence, heatmap paths) is written"
+    required: false
+    default: "deepfake-report.json"
+  heatmaps:
+    description: "Directory where heatmap overlay images are written"
+    required: false
+    default: "deepfake-heatmaps"
+  frames:
+    description: "Number of frames sampled per video"
+    required: false
+    default: "16"
+  model:
+    description: "Optional path to trained model weights (e.g. weights/best.pth)"
+    required: false
+    default: ""
+  fail-on-deepfake:
+    description: "Set to 'false' to keep the job green when deepfakes are detected"
+    required: false
+    default: "true"
+
+outputs:
+  flagged:
+    description: "Number of videos flagged as deepfakes"
+    value: ${{ steps.scan.outputs.flagged }}
+  report-path:
+    description: "Path to the generated JSON report"
+    value: ${{ steps.scan.outputs.report-path }}
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  env:
+    MODEL: ${{ inputs.model }}
+    FAIL_ON_DEEPFAKE: ${{ inputs.fail-on-deepfake }}
+    REPORT: ${{ inputs.report }}
+  args:
+    - ${{ inputs.input-dir }}
+    - --threshold
+    - ${{ inputs.threshold }}
+    - --report
+    - ${{ inputs.report }}
+    - --heatmaps
+    - ${{ inputs.heatmaps }}
+    - --frames
+    - ${{ inputs.frames }}
+
+branding:
+  icon: "shield"
+  color: "red"

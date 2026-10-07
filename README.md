@@ -77,7 +77,7 @@ This is a **defensive detection tool** only. No deepfake generation or manipulat
 ## Quickstart
 
 ```bash
-pip install -r requirements.txt
+pip install -e .[dev]            # or: pip install deepfake-scan
 
 # Prepare dataset
 python scripts/prepare_faceforensics.py --data-root ./data/faceforensics
@@ -88,6 +88,44 @@ python train.py --config configs/efficientnet_lstm.yaml --data-root ./data/facef
 # Inference
 python detect.py --model weights/best.pth --video suspect_video.mp4
 ```
+
+## CI Integration
+
+Scan every video in a pull request with a single step:
+
+```yaml
+- uses: Lubnaaziz-28/deepfake-detection/action@main
+  with:
+    input-dir: ./videos
+    threshold: '0.5'
+```
+
+The action runs `deepfake-scan` on PRs and pushes, writes `deepfake-report.json` (per-file **verdict**, **confidence**, and **heatmap paths**) plus heatmap overlays, and fails the job when any video's confidence meets `--threshold` (disable with `fail-on-deepfake: 'false'`). A full example with artifact uploads lives in [`.github/workflows/deepfake-scan.yml`](.github/workflows/deepfake-scan.yml).
+
+| Input | Default | Purpose |
+|---|---|---|
+| `input-dir` | `./videos` | Directory scanned recursively for video files |
+| `threshold` | `0.5` | Confidence cutoff for a deepfake verdict (precision/recall tuning) |
+| `report` | `deepfake-report.json` | JSON report output path |
+| `heatmaps` | `deepfake-heatmaps` | Heatmap overlay output directory |
+| `frames` | `16` | Frames sampled per video |
+| `model` | – | Trained weights (`weights/best.pth`); without them the temporal-coherence baseline is used |
+| `fail-on-deepfake` | `true` | Fail the workflow when a deepfake is flagged |
+
+**Outputs:** `flagged` (number of flagged videos), `report-path`.
+
+### CLI
+
+```bash
+pip install deepfake-scan
+deepfake-scan ./videos --threshold 0.5 --report report.json
+```
+
+Exit code `1` with `--fail-on-deepfake` when any video is flagged, so CI can gate on the verdict.
+
+### Marketplace
+
+`action/action.yml` is Marketplace-ready. To publish: create a release tag, then enable the listing under **Settings → General → Marketplace**. The action also works without publishing — reference it by path (`uses: ./action`) in private repos or on self-hosted runners.
 
 ## Citation
 

@@ -5,3 +5,10 @@ __pycache__/
 data/
 out/
 .ipynb_checkpoints/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+deepfake-report.json
+deepfake-heatmaps/

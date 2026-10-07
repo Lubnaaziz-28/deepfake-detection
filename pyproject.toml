@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deepfake-scan"
+version = "0.2.0"
+description = "Deepfake detection CLI with temporal analysis and explainable heatmaps"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{ name = "Lubna Aziz", email = "engr.lubnaaziz@gmail.com" }]
+keywords = ["deepfake", "detection", "video", "temporal-analysis", "grad-cam"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "numpy>=1.21",
+    "opencv-python-headless>=4.8",
+    "pillow>=9.0",
+]
+
+[project.optional-dependencies]
+model = ["torch>=1.12", "torchvision>=0.13"]
+dev = ["pytest>=7.0", "ruff>=0.4"]
+
+[project.scripts]
+deepfake-scan = "deepfake_scan.cli:main"
+
+[project.urls]
+Repository = "https://github.com/Lubnaaziz-28/deepfake-detection"
+Issues = "https://github.com/Lubnaaziz-28/deepfake-detection/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]

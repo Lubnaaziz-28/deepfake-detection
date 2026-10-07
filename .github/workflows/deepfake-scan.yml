@@ -1,0 +1,40 @@
+name: Deepfake Scan
+
+on:
+  pull_request:
+    paths:
+      - "videos/**"
+      - "assets/**"
+      - "media/**"
+  push:
+    branches: [main]
+
+jobs:
+  deepfake-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan videos for deepfakes
+        id: scan
+        uses: ./action
+        with:
+          input-dir: ./videos
+          threshold: "0.5"
+          fail-on-deepfake: "true"
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deepfake-report
+          path: |
+            deepfake-report.json
+            deepfake-heatmaps/
+          if-no-files-found: ignore
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "Flagged ${{ steps.scan.outputs.flagged }} video(s)"
+          echo "Report ${{ steps.scan.outputs.report-path }}"
